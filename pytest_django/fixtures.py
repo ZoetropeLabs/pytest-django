@@ -29,16 +29,7 @@ def django_db_modify_db_settings_xdist_suffix(request):
 
     for db_settings in settings.DATABASES.values():
 
-        try:
-            test_name = db_settings['TEST']['NAME']
-        except KeyError:
-            test_name = None
-
-        if not test_name:
-            if db_settings['ENGINE'] == 'django.db.backends.sqlite3':
-                return ':memory:'
-            else:
-                test_name = 'test_{}'.format(db_settings['NAME'])
+        test_name = db_settings['TEST']['NAME']
 
         # Put a suffix like _gw0, _gw1 etc on xdist processes
         xdist_suffix = getattr(request.config, 'slaveinput', {}).get('slaveid')
